@@ -1,14 +1,12 @@
 package Finance::Bank::ID::Base;
-our $VERSION = '0.04';
-
-
+our $VERSION = '0.05';
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
 
 use Moose;
 use Data::Dumper;
 use DateTime;
-use Log::Log4perl;
+use Log::Any;
 use WWW::Mechanize;
 
 
@@ -18,9 +16,9 @@ has password    => (is => 'rw');
 has logged_in   => (is => 'rw');
 has accounts    => (is => 'rw');
 has logger      => (is => 'rw',
-                    default => sub { Log::Log4perl->get_logger() } );
+                    default => sub { Log::Any->get_logger() } );
 has logger_dump => (is => 'rw',
-                    default => sub { Log::Log4perl->get_logger() } );
+                    default => sub { Log::Any->get_logger() } );
 
 has site => (is => 'rw');
 
@@ -70,7 +68,7 @@ sub _req {
     my $evalerr = $@;
 
     eval {
-        $self->logger_dump->trace(
+        $self->logger_dump->debug(
             "<!-- result of mech request #$c ($meth ".$self->_dmp($args)."):\n".
             $mech->response->status_line."\n".
             $mech->response->headers->as_string."\n".
@@ -205,11 +203,11 @@ sub parse_statement {
         last;
     }
 
-    $self->logger->trace("parse_statement(): Temporary result: ".$self->_dmp($stmt));
-    $self->logger->trace("parse_statement(): Status: $status ($error)");
+    $self->logger->debug("parse_statement(): Temporary result: ".$self->_dmp($stmt));
+    $self->logger->debug("parse_statement(): Status: $status ($error)");
 
     $stmt = undef unless $status == 200;
-    $self->logger->trace("parse_statement(): Result: ".$self->_dmp($stmt));
+    $self->logger->debug("parse_statement(): Result: ".$self->_dmp($stmt));
 
     wantarray ? ($status, $error, $stmt) : $stmt;
 }
@@ -227,7 +225,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
@@ -286,7 +284,7 @@ Parse HTML/text into statement data.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Steven Haryanto.
+This software is copyright (c) 2010 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

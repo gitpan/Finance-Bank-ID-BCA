@@ -1,7 +1,5 @@
 package Finance::Bank::ID::BCA;
-our $VERSION = '0.04';
-
-
+our $VERSION = '0.05';
 # ABSTRACT: Check your BCA accounts from Perl
 
 
@@ -401,15 +399,17 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
     use Finance::Bank::ID::BCA;
 
-    # FBI::BCA uses Log4perl. the easiest way to show logs is with these 2 lines:
+    # FBI::BCA uses Log::Any. to show logs using, e.g., Log4perl:
     use Log::Log4perl qw(:easy);
+    use Log::Any::Adapter;
     Log::Log4perl->easy_init($DEBUG);
+    Log::Any::Adapter->set('Log4perl');
 
     my $ibank = Finance::Bank::ID::BCA->new(
         username => 'ABCDEFGH1234', # optional if you're only using parse_statement()
@@ -479,8 +479,9 @@ GUARANTEE>, explicit or implied.
 
 Most methods die() when encountering errors, so you can use eval() to trap them.
 
-This module uses Log::Log4perl, so you can see more debugging statements on
-your screen, log files, etc.
+This module uses L<Log::Any>, so you can see more debugging statements
+on your screen, log files, etc. See the Log::Any documentation on how
+to do that.
 
 Full response headers and bodies are dumped to a separate logger. See
 documentation on C<new()> below and the sample script in examples/ subdirectory
@@ -518,20 +519,17 @@ L<Win32::IE::Mechanize>, etc.
 
 =item * logger
 
-Optional. You can supply a L<Log::Log4perl>-like logger object here. If not
-specified, this module will use a default logger
-(C<Log::Log4perl->get_logger()>).
+Optional. You can supply a L<Log::Any>-like logger object here. If not
+specified, this module will use a default logger.
 
 =item * logger_dump
 
-Optional. You can supply a L<Log::Log4perl>-like logger object here. This is
-just like C<logger> but this module will log contents of response here
-instead of to C<logger_dump> for debugging purposes. You can configure
-Log4perl with something like L<Log::Dispatch::Dir> to save web pages more
-conveniently as separate files. If unspecified, the default logger is used:
-C<Log::Log4perl->get_logger()>.
-
-Note that response contents are logged using the TRACE level.
+Optional. You can supply a L<Log::Any>-like logger object here. This
+is just like C<logger> but this module will log contents of response
+here instead of to C<logger> for debugging purposes. You can configure
+using something like L<Log::Dispatch::Dir> to save web pages more
+conveniently as separate files. If unspecified, the default logger is
+used (same as C<logger>).
 
 =back
 
@@ -636,7 +634,7 @@ C<$stmt> is the result (structure as above, or undef if parsing failed).
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Steven Haryanto.
+This software is copyright (c) 2010 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
