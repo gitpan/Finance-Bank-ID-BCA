@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 VERSION
-    version 0.05
+    version 0.06
 
 SYNOPSIS
         use Finance::Bank::ID::BCA;

@@ -1,5 +1,5 @@
 package Finance::Bank::ID::BCA;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 # ABSTRACT: Check your BCA accounts from Perl
 
 
@@ -399,7 +399,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 SYNOPSIS
 

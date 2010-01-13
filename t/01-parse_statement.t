@@ -5,9 +5,6 @@ use Test::More tests => (4*15 + 1*15 + 1*15);
 use DateTime;
 use File::Slurp;
 use FindBin '$Bin';
-use Log::Log4perl qw(:easy);
-
-Log::Log4perl->easy_init($ERROR);
 
 use Finance::Bank::ID::BCA;
 
