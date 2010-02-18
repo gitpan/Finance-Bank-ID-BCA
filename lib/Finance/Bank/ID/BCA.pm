@@ -1,9 +1,9 @@
 package Finance::Bank::ID::BCA;
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 # ABSTRACT: Check your BCA accounts from Perl
 
 
-use Moose;
+use Any::Moose;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
@@ -387,7 +387,7 @@ sub _ps_get_transactions {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 1;
 
 __END__
@@ -399,7 +399,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 

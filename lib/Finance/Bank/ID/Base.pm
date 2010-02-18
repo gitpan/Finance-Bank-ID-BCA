@@ -1,9 +1,9 @@
 package Finance::Bank::ID::Base;
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
 
-use Moose;
+use Any::Moose;
 use Data::Dumper;
 use DateTime;
 use Log::Any;
@@ -213,7 +213,7 @@ sub parse_statement {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 1;
 
 __END__
@@ -225,7 +225,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 
