@@ -1,5 +1,7 @@
 package Finance::Bank::ID::Base;
-our $VERSION = '0.07';
+BEGIN {
+  $Finance::Bank::ID::Base::VERSION = '0.08';
+}
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
 
@@ -76,7 +78,7 @@ sub _req {
             $mech->content
             );
     };
-    
+
     if ($evalerr) {
         # mech dies on error, we catch it so we can log it
         $errmsg = "die: $evalerr";
@@ -149,9 +151,9 @@ sub parse_statement {
         }
 
         if (defined($stmt->{_total_debit_in_stmt})) {
-            my $na = $stmt->{_total_debit_in_stmt}; 
+            my $na = $stmt->{_total_debit_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) { 
+            for (@{ $stmt->{transactions} }) {
                 $nb += $_->{amount} < 0 ? -$_->{amount} : 0;
             }
             if (abs($na-$nb) >= 0.01) {
@@ -161,34 +163,34 @@ sub parse_statement {
             }
         }
         if (defined($stmt->{_total_credit_in_stmt})) {
-            my $na = $stmt->{_total_credit_in_stmt}; 
+            my $na = $stmt->{_total_credit_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) { 
+            for (@{ $stmt->{transactions} }) {
                 $nb += $_->{amount} > 0 ? $_->{amount} : 0;
             }
             if (abs($na-$nb) >= 0.01) {
-                $status = 400; 
+                $status = 400;
                 $error = "Check failed: total credit do not match ($na vs $nb)";
                 last;
             }
         }
         if (defined($stmt->{_num_debit_tx_in_stmt})) {
-            my $na = $stmt->{_num_debit_tx_in_stmt}; 
+            my $na = $stmt->{_num_debit_tx_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) { 
+            for (@{ $stmt->{transactions} }) {
                 $nb += $_->{amount} < 0 ? 1 : 0;
             }
             if ($na != $nb) {
-                $status = 400; 
+                $status = 400;
                 $error = "Check failed: number of debit transactions ".
                     "do not match ($na vs $nb)";
                 last;
             }
         }
         if (defined($stmt->{_num_credit_tx_in_stmt})) {
-            my $na = $stmt->{_num_credit_tx_in_stmt}; 
+            my $na = $stmt->{_num_credit_tx_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) { 
+            for (@{ $stmt->{transactions} }) {
                 $nb += $_->{amount} > 0 ? 1 : 0;
             }
             if ($na != $nb) {
@@ -209,7 +211,7 @@ sub parse_statement {
     $stmt = undef unless $status == 200;
     $self->logger->debug("parse_statement(): Result: ".$self->_dmp($stmt));
 
-    wantarray ? ($status, $error, $stmt) : $stmt;
+    [$status, $error, $stmt];
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -225,7 +227,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 

@@ -1,5 +1,7 @@
 package Finance::Bank::ID::BCA;
-our $VERSION = '0.07';
+BEGIN {
+  $Finance::Bank::ID::BCA::VERSION = '0.08';
+}
 # ABSTRACT: Check your BCA accounts from Perl
 
 
@@ -226,9 +228,9 @@ sub get_statement {
                     my ($mech) = @_;
                     ''; # XXX check for error
                 });
-    my ($res, $h, $stmt) = $self->parse_statement($self->mech->content);
-    return if $res != 200;
-    $stmt;
+    my $resp = $self->parse_statement($self->mech->content);
+    return if !$resp || $resp->[0] != 200;
+    $resp->[2];
 }
 
 
@@ -399,7 +401,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 
@@ -619,11 +621,9 @@ into structured data:
     ]
  }
 
-If parsing failed, will return undef.
+Returns:
 
-In list context, this method will return HTTP-style response instead:
-
- ($status, $err_details, $stmt)
+ [$status, $err_details, $stmt]
 
 C<$status> is 200 if successful or some other 3-digit code if parsing failed.
 C<$stmt> is the result (structure as above, or undef if parsing failed).
