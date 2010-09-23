@@ -1,3 +1,4 @@
+Build.PL
 Changes
 LICENSE
 MANIFEST
@@ -7,6 +8,7 @@ dist.ini
 examples/download-bca
 lib/Finance/Bank/ID/BCA.pm
 lib/Finance/Bank/ID/Base.pm
+lib/Finance/BankUtils/ID/Mechanize.pm
 t/00-compile.t
 t/01-parse_statement.t
 t/data/stmt1-en.opera10linux.txt
@@ -17,3 +19,4 @@ t/data/stmt1b.chrome4linux.txt
 t/data/stmt2.txt
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/release-verify_https.t

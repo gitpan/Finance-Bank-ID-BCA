@@ -1,6 +1,6 @@
 package Finance::Bank::ID::BCA;
 BEGIN {
-  $Finance::Bank::ID::BCA::VERSION = '0.09';
+  $Finance::Bank::ID::BCA::VERSION = '0.10';
 }
 # ABSTRACT: Check your BCA accounts from Perl
 
@@ -19,6 +19,7 @@ sub BUILD {
     my ($self, $args) = @_;
 
     $self->site("https://ibank.klikbca.com") unless $self->site;
+    $self->https_host("ibank.klikbca.com")   unless $self->https_host;
 }
 
 
@@ -401,7 +402,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
@@ -416,6 +417,8 @@ version 0.09
     my $ibank = Finance::Bank::ID::BCA->new(
         username => 'ABCDEFGH1234', # optional if you're only using parse_statement()
         password => '123456',       # idem
+        verify_https => 1,          # default is 0
+        #https_ca_dir => '/etc/ssl/certs', # default is already /etc/ssl/certs
     );
 
     eval {
@@ -512,12 +515,28 @@ C<login()> etc.
 =item * mech
 
 Optional. A L<WWW::Mechanize>-like object. By default this module instantiate a
-new WWW::Mechanize object to retrieve web pages, but if you want to use a
-custom/different one, you are allowed to do so here. Use cases include: you want
-to retry and increase timeout due to slow/unreliable network connection (using
+new L<Finance::BankUtils::ID::Mechanize> (a WWW::Mechanize subclass) object to
+retrieve web pages, but if you want to use a custom/different one, you are
+allowed to do so here. Use cases include: you want to retry and increase timeout
+due to slow/unreliable network connection (using
 L<WWW::Mechanize::Plugin::Retry>), you want to slow things down using
 L<WWW::Mechanize::Sleepy>, you want to use IE engine using
 L<Win32::IE::Mechanize>, etc.
+
+=item * verify_https
+
+Optional. If you are using the default mech object (see previous option), you can
+set this option to 1 to enable SSL certificate verification (recommended for
+security). Default is 0.
+
+SSL verification will require a CA bundle directory, default is /etc/ssl/certs.
+Adjust B<https_ca_dir> option if your CA bundle is not located in that directory.
+
+=item * https_ca_dir
+
+Optional. Default is /etc/ssl/certs. Used to set HTTPS_CA_DIR environment
+variable for enabling certificate checking in Crypt::SSLeay. Only used if
+B<verify_https> is on.
 
 =item * logger
 
@@ -630,7 +649,7 @@ C<$stmt> is the result (structure as above, or undef if parsing failed).
 
 =head1 AUTHOR
 
-  Steven Haryanto <stevenharyanto@gmail.com>
+Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
