@@ -1,12 +1,16 @@
 Build.PL
 Changes
+Changes~
 LICENSE
 MANIFEST
 META.yml
 README
 dist.ini
+dist.ini~
 examples/download-bca
+examples/download-bca~
 lib/Finance/Bank/ID/BCA.pm
+lib/Finance/Bank/ID/BCA.pm~
 lib/Finance/Bank/ID/Base.pm
 lib/Finance/BankUtils/ID/Mechanize.pm
 t/00-compile.t

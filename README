@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 VERSION
-    version 0.10
+    version 0.12
 
 SYNOPSIS
         use Finance::Bank::ID::BCA;
@@ -55,7 +55,8 @@ DESCRIPTION
     This module provide a rudimentary interface to the web-based online
     banking interface of the Indonesian Bank Central Asia (BCA) at
     https://ibank.klikbca.com. You will need either Crypt::SSLeay or
-    IO::Socket::SSL installed for HTTPS support to work. WWW::Mechanize is
+    IO::Socket::SSL installed for HTTPS support to work (and strictly
+    Crypt::SSLeay to enable certificate verification). WWW::Mechanize is
     required but you can supply your own mech-like object.
 
     This module can only login to the retail/personal version of the site

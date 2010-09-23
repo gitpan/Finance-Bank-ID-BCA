@@ -27,4 +27,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-BCA/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-BCA
-version: 0.10
+version: 0.12
