@@ -1,6 +1,6 @@
 package Finance::BankUtils::ID::Mechanize;
 BEGIN {
-  $Finance::BankUtils::ID::Mechanize::VERSION = '0.12';
+  $Finance::BankUtils::ID::Mechanize::VERSION = '0.13';
 }
 # ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
 
@@ -48,7 +48,7 @@ Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize that does HTTPS
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 SYNOPSIS
 
