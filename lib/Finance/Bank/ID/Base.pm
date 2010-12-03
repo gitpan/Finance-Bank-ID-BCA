@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Base;
 BEGIN {
-  $Finance::Bank::ID::Base::VERSION = '0.13';
+  $Finance::Bank::ID::Base::VERSION = '0.14';
 }
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
@@ -245,7 +245,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 

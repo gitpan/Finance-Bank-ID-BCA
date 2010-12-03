@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-BCA',
-  'dist_version' => '0.13',
+  'dist_version' => '0.14',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::BCA',
   'recommends' => {},
@@ -30,6 +30,7 @@ my %module_build_args = (
     'DateTime' => '0',
     'File::Slurp' => '0',
     'Log::Any' => '0',
+    'Log::Any::App' => '0.23',
     'Mouse' => '0',
     'WWW::Mechanize' => '0',
     'perl' => '5.010000'
