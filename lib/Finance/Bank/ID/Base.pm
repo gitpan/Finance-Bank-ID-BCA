@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Base;
 BEGIN {
-  $Finance::Bank::ID::Base::VERSION = '0.14';
+  $Finance::Bank::ID::Base::VERSION = '0.15';
 }
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
@@ -195,7 +195,8 @@ sub parse_statement {
         if (defined($stmt->{_num_debit_tx_in_stmt})) {
             my $na = $stmt->{_num_debit_tx_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) {
+            for (@{ $stmt->{transactions} },
+                 @{ $stmt->{skipped_transactions} }) {
                 $nb += $_->{amount} < 0 ? 1 : 0;
             }
             if ($na != $nb) {
@@ -208,7 +209,8 @@ sub parse_statement {
         if (defined($stmt->{_num_credit_tx_in_stmt})) {
             my $na = $stmt->{_num_credit_tx_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) {
+            for (@{ $stmt->{transactions} },
+                 @{ $stmt->{skipped_transactions} }) {
                 $nb += $_->{amount} > 0 ? 1 : 0;
             }
             if ($na != $nb) {
@@ -245,7 +247,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 

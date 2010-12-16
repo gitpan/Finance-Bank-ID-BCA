@@ -1,10 +1,11 @@
 package Finance::Bank::ID::BCA;
 BEGIN {
-  $Finance::Bank::ID::BCA::VERSION = '0.14';
+  $Finance::Bank::ID::BCA::VERSION = '0.15';
 }
 # ABSTRACT: Check your BCA accounts from Perl
 
 
+use 5.010;
 use Any::Moose;
 use DateTime;
 
@@ -12,6 +13,9 @@ extends 'Finance::Bank::ID::Base';
 
 
 has _variant => (is => 'rw'); # bisnis or perorangan
+
+
+has skip_NEXT => (is => 'rw'); # bisnis or perorangan
 
 
 
@@ -322,6 +326,7 @@ sub _ps_get_transactions {
     }
 
     my @tx;
+    my @skipped_tx;
     my $last_date;
     my $seq;
     my $i = 0;
@@ -355,6 +360,9 @@ sub _ps_get_transactions {
         $tx->{amount}  = ($e->{crdb} =~ /CR/ ? 1 : -1) * ($self->_stripD($e->{amt}) + 0.01*$e->{amtf});
         $tx->{balance} = ($self->_stripD($e->{bal}) + 0.01*$e->{balf});
 
+        if ($tx->{is_next} && $self->skip_NEXT) {
+        }
+
         if (!$last_date || DateTime->compare($last_date, $tx->{date})) {
             $seq = 1;
             $last_date = $tx->{date};
@@ -383,9 +391,15 @@ sub _ps_get_transactions {
             # month, regardless of whether it's Sat/Sun or not
         }
 
-        push @tx, $tx;
+        if ($tx->{is_next} && $self->skip_NEXT) {
+            push @skipped_tx, $tx;
+            $seq--;
+        } else {
+            push @tx, $tx;
+        }
     }
     $stmt->{transactions} = \@tx;
+    $stmt->{skipped_transactions} = \@skipped_tx;
     "";
 }
 
@@ -402,7 +416,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 
@@ -494,6 +508,10 @@ documentation on C<new()> below and the sample script in examples/ subdirectory
 in the distribution.
 
 =head1 ATTRIBUTES
+
+=head2 skip_NEXT => BOOL
+
+If set to true, then statement with NEXT status will be skipped.
 
 =head1 METHODS
 

@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 VERSION
-    version 0.14
+    version 0.15
 
 SYNOPSIS
         use Finance::Bank::ID::BCA;
@@ -91,6 +91,9 @@ ERROR HANDLING AND DEBUGGING
     subdirectory in the distribution.
 
 ATTRIBUTES
+  skip_NEXT => BOOL
+    If set to true, then statement with NEXT status will be skipped.
+
 METHODS
   new(%args)
     Create a new instance. %args keys:

@@ -7,8 +7,6 @@ META.yml
 README
 dist.ini
 examples/download-bca
-examples/download-bca.orig
-examples/download-bca.rej
 lib/Finance/Bank/ID/BCA.pm
 lib/Finance/Bank/ID/Base.pm
 lib/Finance/BankUtils/ID/Mechanize.pm
@@ -19,6 +17,7 @@ t/data/stmt1.ff35linux.txt
 t/data/stmt1.html
 t/data/stmt1.opera10linux.txt
 t/data/stmt1b.chrome4linux.txt
+t/data/stmt2-NEXT.txt
 t/data/stmt2.txt
 t/release-pod-coverage.t
 t/release-pod-syntax.t
