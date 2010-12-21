@@ -1,6 +1,6 @@
 package Finance::Bank::ID::BCA;
 BEGIN {
-  $Finance::Bank::ID::BCA::VERSION = '0.15';
+  $Finance::Bank::ID::BCA::VERSION = '0.16';
 }
 # ABSTRACT: Check your BCA accounts from Perl
 
@@ -416,7 +416,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 
@@ -461,7 +461,7 @@ version 0.15
     if ($ibank->logged_in) { $ibank->logout() }
 
     # utility routines
-    my $stmt = $ibank->parse_statement($html_or_copy_pasted_text);
+    my $res = $ibank->parse_statement($html_or_copy_pasted_text);
 
 Also see the examples/ subdirectory in the distribution for a sample script using
 this module.
@@ -605,7 +605,7 @@ current net banking login.
 Return balance for specified account, or the default account if C<$account> is
 not specified.
 
-=head2 get_statement(%args)
+=head2 get_statement(%args) => $stmt
 
 Get account statement. %args keys:
 
@@ -632,7 +632,9 @@ Saturday/Sunday/holiday, depending on the default value set by the site's form).
 
 =back
 
-=head2 parse_statement($html_or_text, %opts)
+See parse_statement() on structure of $stmt.
+
+=head2 parse_statement($html_or_text, %opts) => $res
 
 Given the HTML/copy-pasted text of the account statement results page, parse it
 into structured data:

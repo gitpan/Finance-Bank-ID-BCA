@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Base;
 BEGIN {
-  $Finance::Bank::ID::Base::VERSION = '0.15';
+  $Finance::Bank::ID::Base::VERSION = '0.16';
 }
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
@@ -169,26 +169,36 @@ sub parse_statement {
         if (defined($stmt->{_total_debit_in_stmt})) {
             my $na = $stmt->{_total_debit_in_stmt};
             my $nb = 0;
+            my $ntx = 0;
             for (@{ $stmt->{transactions} },
                  @{ $stmt->{skipped_transactions} }) {
-                $nb += $_->{amount} < 0 ? -$_->{amount} : 0;
+                if ($_->{amount} < 0) {
+                    $nb += -$_->{amount}; $ntx++;
+                }
             }
             if (abs($na-$nb) >= 0.01) {
                 $status = 400;
-                $error = "Check failed: total debit do not match ($na vs $nb)";
+                $error = "Check failed: total debit do not match ".
+                    "($na in summary line vs $nb when totalled from ".
+                        "$ntx transactions(s))";
                 last;
             }
         }
         if (defined($stmt->{_total_credit_in_stmt})) {
             my $na = $stmt->{_total_credit_in_stmt};
             my $nb = 0;
+            my $ntx = 0;
             for (@{ $stmt->{transactions} },
                  @{ $stmt->{skipped_transactions} }) {
-                $nb += $_->{amount} > 0 ? $_->{amount} : 0;
+                if ($_->{amount} > 0) {
+                    $nb += $_->{amount}; $ntx++;
+                }
             }
             if (abs($na-$nb) >= 0.01) {
                 $status = 400;
-                $error = "Check failed: total credit do not match ($na vs $nb)";
+                $error = "Check failed: total credit do not match ".
+                    "($na in summary line vs $nb when totalled from ".
+                        "$ntx transactions(s))";
                 last;
             }
         }
@@ -202,7 +212,7 @@ sub parse_statement {
             if ($na != $nb) {
                 $status = 400;
                 $error = "Check failed: number of debit transactions ".
-                    "do not match ($na vs $nb)";
+                    "do not match ($na in summary line vs $nb when totalled)";
                 last;
             }
         }
@@ -216,7 +226,7 @@ sub parse_statement {
             if ($na != $nb) {
                 $status = 400;
                 $error = "Check failed: number of credit transactions ".
-                    "do not match ($na vs $nb)";
+                    "do not match ($na in summary line vs $nb when totalled)";
                 last;
             }
         }
@@ -247,7 +257,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 
