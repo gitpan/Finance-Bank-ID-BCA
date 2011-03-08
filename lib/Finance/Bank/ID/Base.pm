@@ -1,12 +1,12 @@
 package Finance::Bank::ID::Base;
 BEGIN {
-  $Finance::Bank::ID::Base::VERSION = '0.16';
+  $Finance::Bank::ID::Base::VERSION = '0.17';
 }
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
 
 use 5.010;
-use Any::Moose;
+use Moo;
 use Data::Dumper;
 use DateTime;
 use Log::Any;
@@ -25,10 +25,10 @@ has logger_dump => (is => 'rw',
 
 has site => (is => 'rw');
 
-has _req_counter => (is => 'rw', default => 0);
+has _req_counter => (is => 'rw', default => sub{0});
 
-has verify_https => (is => 'rw', default => 0);
-has https_ca_dir => (is => 'rw', default => '/etc/ssl/certs');
+has verify_https => (is => 'rw', default => sub{0});
+has https_ca_dir => (is => 'rw', default => sub{'/etc/ssl/certs'});
 has https_host   => (is => 'rw');
 
 
@@ -244,8 +244,6 @@ sub parse_statement {
     [$status, $error, $stmt];
 }
 
-__PACKAGE__->meta->make_immutable;
-no Any::Moose;
 1;
 
 __END__
@@ -257,7 +255,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -271,6 +269,8 @@ L<Finance::Bank::ID::Mandiri>.
 =head1 ATTRIBUTES
 
 =head1 METHODS
+
+=for Pod::Coverage BUILD
 
 =head2 new(%args)
 
@@ -316,7 +316,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Steven Haryanto.
+This software is copyright (c) 2011 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

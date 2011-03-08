@@ -1,6 +1,6 @@
 package Finance::BankUtils::ID::Mechanize;
 BEGIN {
-  $Finance::BankUtils::ID::Mechanize::VERSION = '0.16';
+  $Finance::BankUtils::ID::Mechanize::VERSION = '0.17';
 }
 # ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
 
@@ -26,7 +26,7 @@ sub request {
     my ($self, $req) = @_;
     local $ENV{HTTPS_CA_DIR} = $self->{verify_https} ?
         $self->{https_ca_dir} : undef;
-    $log->trace("HTTPS_CA_DIR = $ENV{HTTPS_CA_DIR}");
+    $log->tracef("HTTPS_CA_DIR = %s", $ENV{HTTPS_CA_DIR});
     if ($self->{verify_https} && $self->{https_host}) {
         $req->header('If-SSL-Cert-Subject',
                      qr!\Q/CN=$self->{https_host}\E(/|$)!);
@@ -48,7 +48,7 @@ Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize that does HTTPS
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -75,7 +75,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Steven Haryanto.
+This software is copyright (c) 2011 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

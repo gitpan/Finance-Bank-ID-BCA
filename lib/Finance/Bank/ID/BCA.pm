@@ -1,12 +1,12 @@
 package Finance::Bank::ID::BCA;
 BEGIN {
-  $Finance::Bank::ID::BCA::VERSION = '0.16';
+  $Finance::Bank::ID::BCA::VERSION = '0.17';
 }
 # ABSTRACT: Check your BCA accounts from Perl
 
 
 use 5.010;
-use Any::Moose;
+use Moo;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
@@ -403,8 +403,6 @@ sub _ps_get_transactions {
     "";
 }
 
-__PACKAGE__->meta->make_immutable;
-no Any::Moose;
 1;
 
 __END__
@@ -416,7 +414,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -514,6 +512,8 @@ in the distribution.
 If set to true, then statement with NEXT status will be skipped.
 
 =head1 METHODS
+
+=for Pod::Coverage BUILD
 
 =head2 new(%args)
 
@@ -674,7 +674,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Steven Haryanto.
+This software is copyright (c) 2011 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
