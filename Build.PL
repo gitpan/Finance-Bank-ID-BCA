@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-BCA',
-  'dist_version' => '0.17',
+  'dist_version' => '0.18',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::BCA',
   'recommends' => {},
@@ -34,7 +34,9 @@ my %module_build_args = (
     'WWW::Mechanize' => '0',
     'perl' => '5.010000'
   },
-  'script_files' => []
+  'script_files' => [
+    'bin/download-bca'
+  ]
 );
 
 

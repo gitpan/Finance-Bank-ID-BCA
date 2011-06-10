@@ -5,8 +5,8 @@ MANIFEST
 MANIFEST.SKIP
 META.yml
 README
+bin/download-bca
 dist.ini
-examples/download-bca
 lib/Finance/Bank/ID/BCA.pm
 lib/Finance/Bank/ID/Base.pm
 lib/Finance/BankUtils/ID/Mechanize.pm
