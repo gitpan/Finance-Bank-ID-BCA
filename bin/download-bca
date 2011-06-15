@@ -3,7 +3,7 @@
 # workaround for dzil
 package download_bca;
 BEGIN {
-  $download_bca::VERSION = '0.18';
+  $download_bca::VERSION = '0.19';
 }
 
 use 5.010;
@@ -110,7 +110,7 @@ download_bca
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 SYNOPSIS
 
@@ -124,15 +124,14 @@ Then:
 
  $ download-bca
 
-For quieter output:
-
- $ QUIET=1 download-bca
+Get your statements in data dir (defaults to ~/bca). See logs in your log dir
+(defaults to ~/bca/logs).
 
 =head1 DESCRIPTION
 
 This is a command-line script which you can run from cron or whatever to
-conveniently download BCA statements. By default, it downloads a month's worth
-of statements to ~/bca/. Future version will allow options.
+conveniently download BCA statements. By default, it downloads 31 day's worth of
+statements to ~/bca/. To change this, use --days and --data_dir options.
 
 =head1 SEE ALSO
 

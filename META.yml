@@ -23,8 +23,9 @@ requires:
   Log::Any::App: 0.23
   Moo: 0
   WWW::Mechanize: 0
+  YAML: 0
   perl: 5.010000
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-BCA/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-BCA
-version: 0.18
+version: 0.19
