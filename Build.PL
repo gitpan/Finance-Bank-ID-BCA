@@ -17,12 +17,13 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-BCA',
-  'dist_version' => '0.19',
+  'dist_version' => '0.20',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::BCA',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
+    'App::Options' => '0',
     'Crypt::SSLeay' => '0',
     'Data::Dumper' => '0',
     'Data::Rmap' => '0',
