@@ -1,6 +1,6 @@
 package Finance::BankUtils::ID::Mechanize;
 BEGIN {
-  $Finance::BankUtils::ID::Mechanize::VERSION = '0.20';
+  $Finance::BankUtils::ID::Mechanize::VERSION = '0.21';
 }
 # ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
 
@@ -25,7 +25,7 @@ sub new {
 sub request {
     my ($self, $req) = @_;
     local $ENV{HTTPS_CA_DIR} = $self->{verify_https} ?
-        $self->{https_ca_dir} : undef;
+        $self->{https_ca_dir} : '';
     $log->tracef("HTTPS_CA_DIR = %s", $ENV{HTTPS_CA_DIR});
     if ($self->{verify_https} && $self->{https_host}) {
         $req->header('If-SSL-Cert-Subject',
@@ -48,7 +48,7 @@ Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize that does HTTPS
 
 =head1 VERSION
 
-version 0.20
+version 0.21
 
 =head1 SYNOPSIS
 
