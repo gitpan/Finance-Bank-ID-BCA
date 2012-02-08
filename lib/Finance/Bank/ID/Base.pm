@@ -1,17 +1,15 @@
 package Finance::Bank::ID::Base;
-BEGIN {
-  $Finance::Bank::ID::Base::VERSION = '0.21';
-}
-# ABSTRACT: Base class for Finance::Bank::ID::BCA etc
-
 
 use 5.010;
 use Moo;
-use Data::Dumper;
-use DateTime;
 use Log::Any;
+
+use Data::Dumper;
+use Data::Rmap qw(:all);
+use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 
+our $VERSION = '0.22'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -31,10 +29,14 @@ has verify_https => (is => 'rw', default => sub{0});
 has https_ca_dir => (is => 'rw', default => sub{'/etc/ssl/certs'});
 has https_host   => (is => 'rw');
 
-
 sub _fmtdate {
     my ($self, $dt) = @_;
-    $dt->strftime("%Y-%m-%d");
+    $dt->ymd;
+}
+
+sub _fmtdt {
+    my ($self, $dt) = @_;
+    $dt->ymd . ' ' . $dt->hms;
 }
 
 sub _dmp {
@@ -48,7 +50,6 @@ sub _stripD {
     $s =~ s/\D+//g;
     $s;
 }
-
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -113,40 +114,31 @@ sub _req {
     }
 }
 
-
 sub login {
     die "Should be implemented by child";
 }
-
 
 sub logout {
     die "Should be implemented by child";
 }
 
-
 sub list_accounts {
     die "Should be implemented by child";
 }
-
 
 sub check_balance {
     die "Should be implemented by child";
 }
 
-
 sub get_balance { check_balance(@_) }
-
 
 sub get_statement {
     die "Should be implemented by child";
 }
 
-
 sub check_statement { get_statement(@_) }
 
-
 sub account_statement { get_statement(@_) }
-
 
 sub parse_statement {
     my ($self, $page, %opts) = @_;
@@ -241,10 +233,21 @@ sub parse_statement {
     $stmt = undef unless $status == 200;
     $self->logger->debug("parse_statement(): Result: ".$self->_dmp($stmt));
 
+    unless ($opts{return_datetime_obj} // 1) {
+        # $_[0]{seen} = {} is a trick to allow multiple places which mention the
+        # same object to be converted (defeat circular checking)
+        rmap_ref {
+            $_[0]{seen} = {};
+            $_ = $self->_fmtdt($_) if UNIVERSAL::isa($_, "DateTime");
+        } $stmt;
+    }
+
     [$status, $error, $stmt];
 }
 
 1;
+# ABSTRACT: Base class for Finance::Bank::ID::BCA etc
+
 
 __END__
 =pod
@@ -255,7 +258,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 
@@ -316,7 +319,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

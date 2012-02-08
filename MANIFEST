@@ -6,6 +6,7 @@ MANIFEST.SKIP
 META.yml
 README
 bin/download-bca
+bin/parse-bca-statement
 dist.ini
 lib/Finance/Bank/ID/BCA.pm
 lib/Finance/Bank/ID/Base.pm

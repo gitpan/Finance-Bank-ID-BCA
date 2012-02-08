@@ -2,16 +2,12 @@
 
 # workaround for dzil
 package download_bca;
-BEGIN {
-  $download_bca::VERSION = '0.21';
-}
 
 use 5.010;
 use strict;
 use warnings;
 
 use Cwd;
-use Data::Rmap qw(:all);
 use File::HomeDir;
 use File::Path;
 use File::Slurp;
@@ -75,18 +71,15 @@ eval {
     my $stmt = $ibank->get_statement(
         account => $App::options{account},
         days => $App::options{days},
+        parse_opts => {return_datetime_obj=>0},
     );
     my $filename = sprintf "%s/bca.statement.%s.%s.to.%s.yaml",
         $App::options{data_dir},
         $stmt->{account},
-        $stmt->{start_date}->ymd,
-        $stmt->{end_date}->ymd;
+        $stmt->{start_date},
+        $stmt->{end_date};
+    $filename =~ s/[: ]//g; # : is for windows
     $log->info("Writing statements to YAML file `$filename' ...");
-
-    # stringify DateTime objects so dump becomes simpler and shorter, the
-    # $_[0]{seen} = {} is a trick to allow multiple places which mention the same
-    # object to be converted (defeat circular checking)
-    rmap_ref { $_[0]{seen} = {}; $_ = $_->ymd if UNIVERSAL::isa($_, "DateTime") } $stmt;
 
     write_file($filename, Dump($stmt));
 };
@@ -110,7 +103,7 @@ download_bca
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 
@@ -143,7 +136,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

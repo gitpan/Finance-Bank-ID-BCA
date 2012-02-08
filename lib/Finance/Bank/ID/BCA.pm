@@ -1,23 +1,15 @@
 package Finance::Bank::ID::BCA;
-BEGIN {
-  $Finance::Bank::ID::BCA::VERSION = '0.21';
-}
-# ABSTRACT: Check your BCA accounts from Perl
-
 
 use 5.010;
 use Moo;
 use DateTime;
 
+our $VERSION = '0.22'; # VERSION
+
 extends 'Finance::Bank::ID::Base';
 
-
 has _variant => (is => 'rw'); # bisnis or perorangan
-
-
 has skip_NEXT => (is => 'rw'); # bisnis or perorangan
-
-
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -25,7 +17,6 @@ sub BUILD {
     $self->site("https://ibank.klikbca.com") unless $self->site;
     $self->https_host("ibank.klikbca.com")   unless $self->https_host;
 }
-
 
 sub login {
     my ($self) = @_;
@@ -56,7 +47,6 @@ sub login {
     #$self->_req(get => ["$s/nav_bar_indo/menu_nav.htm"]); # failed?
 }
 
-
 sub logout {
     my ($self) = @_;
 
@@ -71,7 +61,6 @@ sub _menu {
     my $s = $self->site;
     $self->_req(get => ["$s/nav_bar_indo/account_information_menu.htm"]);
 }
-
 
 sub list_accounts {
     my ($self) = @_;
@@ -115,7 +104,6 @@ sub _check_balances {
     @res;
 }
 
-
 sub check_balance {
     my ($self, $account) = @_;
     my @bals = $self->_check_balances;
@@ -126,7 +114,6 @@ sub check_balance {
     }
     return;
 }
-
 
 sub get_statement {
     my ($self, %args) = @_;
@@ -233,11 +220,11 @@ sub get_statement {
                     my ($mech) = @_;
                     ''; # XXX check for error
                 });
-    my $resp = $self->parse_statement($self->mech->content);
+    my $parse_opts = $args{parse_opts} // {};
+    my $resp = $self->parse_statement($self->mech->content, %$parse_opts);
     return if !$resp || $resp->[0] != 200;
     $resp->[2];
 }
-
 
 sub _ps_detect {
     my ($self, $page) = @_;
@@ -404,6 +391,8 @@ sub _ps_get_transactions {
 }
 
 1;
+# ABSTRACT: Check your BCA accounts from Perl
+
 
 __END__
 =pod
@@ -414,7 +403,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 
@@ -427,7 +416,7 @@ version 0.21
     Log::Any::Adapter->set('Log4perl');
 
     my $ibank = Finance::Bank::ID::BCA->new(
-        username => 'ABCDEFGH1234', # optional if you're only using parse_statement()
+        username => 'ABCDEFGH1234', # opt if only using parse_statement()
         password => '123456',       # idem
         verify_https => 1,          # default is 0
         #https_ca_dir => '/etc/ssl/certs', # default is already /etc/ssl/certs
@@ -441,7 +430,7 @@ version 0.21
         my $bal = $ibank->check_balance($acct); # $acct is optional
 
         my $stmt = $ibank->get_statement(
-            account    => ..., # opt, default account will be used if not specified
+            account    => ..., # opt, default account will be used if undef
             days       => 31,  # opt
             start_date => DateTime->new(year=>2009, month=>10, day=>6),
                                # opt, takes precedence over 'days'
@@ -459,10 +448,10 @@ version 0.21
     if ($ibank->logged_in) { $ibank->logout() }
 
     # utility routines
-    my $res = $ibank->parse_statement($html_or_copy_pasted_text);
+    my $res = $ibank->parse_statement($html);
 
-Also see the examples/ subdirectory in the distribution for a sample script using
-this module.
+Also see the examples/ subdirectory in the distribution for a sample script
+using this module.
 
 =head1 DESCRIPTION
 
@@ -519,7 +508,7 @@ If set to true, then statement with NEXT status will be skipped.
 
 Create a new instance. %args keys:
 
-=over
+=over 4
 
 =item * username
 
@@ -544,12 +533,13 @@ L<Win32::IE::Mechanize>, etc.
 
 =item * verify_https
 
-Optional. If you are using the default mech object (see previous option), you can
-set this option to 1 to enable SSL certificate verification (recommended for
+Optional. If you are using the default mech object (see previous option), you
+can set this option to 1 to enable SSL certificate verification (recommended for
 security). Default is 0.
 
 SSL verification will require a CA bundle directory, default is /etc/ssl/certs.
-Adjust B<https_ca_dir> option if your CA bundle is not located in that directory.
+Adjust B<https_ca_dir> option if your CA bundle is not located in that
+directory.
 
 =item * https_ca_dir
 
@@ -564,12 +554,11 @@ specified, this module will use a default logger.
 
 =item * logger_dump
 
-Optional. You can supply a L<Log::Any>-like logger object here. This
-is just like C<logger> but this module will log contents of response
-here instead of to C<logger> for debugging purposes. You can configure
-using something like L<Log::Dispatch::Dir> to save web pages more
-conveniently as separate files. If unspecified, the default logger is
-used (same as C<logger>).
+Optional. You can supply a L<Log::Any>-like logger object here. This is just
+like C<logger> but this module will log contents of response here instead of to
+C<logger> for debugging purposes. You can configure using something like
+L<Log::Dispatch::Dir> to save web pages more conveniently as separate files. If
+unspecified, the default logger is used (same as C<logger>).
 
 =back
 
@@ -609,7 +598,7 @@ not specified.
 
 Get account statement. %args keys:
 
-=over
+=over 4
 
 =item * account
 
@@ -634,10 +623,10 @@ Saturday/Sunday/holiday, depending on the default value set by the site's form).
 
 See parse_statement() on structure of $stmt.
 
-=head2 parse_statement($html_or_text, %opts) => $res
+=head2 parse_statement($html, %opts) => $res
 
-Given the HTML/copy-pasted text of the account statement results page, parse it
-into structured data:
+Given the HTML text of the account statement results page, parse it into
+structured data:
 
  $stmt = {
     start_date     => $start_dt, # a DateTime object
@@ -648,9 +637,11 @@ into structured data:
     transactions   => [
         # first transaction
         {
-          date        => $dt, # a DateTime object, book date ("tanggal pembukuan")
-          seq         => INT, # a number >= 1 which marks the sequence of transactions for the day
-          amount      => REAL, # a real number, positive means credit (deposit), negative means debit (withdrawal)
+          date        => $dt,  # a DateTime obj, book date ("tanggal pembukuan")
+          seq         => INT,  # a number >= 1 which marks the sequence of
+                               # transactions for the day
+          amount      => REAL, # a real number, positive means credit (deposit),
+                               # negative means debit (withdrawal)
           description => STRING,
           is_pending  => BOOL,
           branch      => STRING, # a 4-digit branch/ATM code
@@ -668,13 +659,31 @@ Returns:
 C<$status> is 200 if successful or some other 3-digit code if parsing failed.
 C<$stmt> is the result (structure as above, or undef if parsing failed).
 
+Options:
+
+=over 4
+
+=item * return_datetime_obj => BOOL
+
+Default is true. If set to false, the method will return dates as strings with
+this format: 'YYYY-MM-DD HH::mm::SS' (produced by DateTime->dmy . ' ' .
+DateTime->hms). This is to make it easy to pass the data structure into YAML,
+JSON, MySQL, etc. Nevertheless, internally DateTime objects are still used.
+
+=back
+
+Additional notes:
+
+The method can also handle some copy-pasted text from the GUI browser, but this
+is no longer documented or guaranteed to keep working.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

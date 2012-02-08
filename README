@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 VERSION
-    version 0.21
+    version 0.22
 
 SYNOPSIS
         use Finance::Bank::ID::BCA;
@@ -14,7 +14,7 @@ SYNOPSIS
         Log::Any::Adapter->set('Log4perl');
 
         my $ibank = Finance::Bank::ID::BCA->new(
-            username => 'ABCDEFGH1234', # optional if you're only using parse_statement()
+            username => 'ABCDEFGH1234', # opt if only using parse_statement()
             password => '123456',       # idem
             verify_https => 1,          # default is 0
             #https_ca_dir => '/etc/ssl/certs', # default is already /etc/ssl/certs
@@ -28,7 +28,7 @@ SYNOPSIS
             my $bal = $ibank->check_balance($acct); # $acct is optional
 
             my $stmt = $ibank->get_statement(
-                account    => ..., # opt, default account will be used if not specified
+                account    => ..., # opt, default account will be used if undef
                 days       => 31,  # opt
                 start_date => DateTime->new(year=>2009, month=>10, day=>6),
                                    # opt, takes precedence over 'days'
@@ -46,7 +46,7 @@ SYNOPSIS
         if ($ibank->logged_in) { $ibank->logout() }
 
         # utility routines
-        my $res = $ibank->parse_statement($html_or_copy_pasted_text);
+        my $res = $ibank->parse_statement($html);
 
     Also see the examples/ subdirectory in the distribution for a sample
     script using this module.
@@ -203,9 +203,9 @@ METHODS
 
     See parse_statement() on structure of $stmt.
 
-  parse_statement($html_or_text, %opts) => $res
-    Given the HTML/copy-pasted text of the account statement results page,
-    parse it into structured data:
+  parse_statement($html, %opts) => $res
+    Given the HTML text of the account statement results page, parse it into
+    structured data:
 
      $stmt = {
         start_date     => $start_dt, # a DateTime object
@@ -216,9 +216,11 @@ METHODS
         transactions   => [
             # first transaction
             {
-              date        => $dt, # a DateTime object, book date ("tanggal pembukuan")
-              seq         => INT, # a number >= 1 which marks the sequence of transactions for the day
-              amount      => REAL, # a real number, positive means credit (deposit), negative means debit (withdrawal)
+              date        => $dt,  # a DateTime obj, book date ("tanggal pembukuan")
+              seq         => INT,  # a number >= 1 which marks the sequence of
+                                   # transactions for the day
+              amount      => REAL, # a real number, positive means credit (deposit),
+                                   # negative means debit (withdrawal)
               description => STRING,
               is_pending  => BOOL,
               branch      => STRING, # a 4-digit branch/ATM code
@@ -237,11 +239,26 @@ METHODS
     failed. $stmt is the result (structure as above, or undef if parsing
     failed).
 
+    Options:
+
+    *   return_datetime_obj => BOOL
+
+        Default is true. If set to false, the method will return dates as
+        strings with this format: 'YYYY-MM-DD HH::mm::SS' (produced by
+        DateTime->dmy . ' ' . DateTime->hms). This is to make it easy to
+        pass the data structure into YAML, JSON, MySQL, etc. Nevertheless,
+        internally DateTime objects are still used.
+
+    Additional notes:
+
+    The method can also handle some copy-pasted text from the GUI browser,
+    but this is no longer documented or guaranteed to keep working.
+
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2011 by Steven Haryanto.
+    This software is copyright (c) 2012 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.
