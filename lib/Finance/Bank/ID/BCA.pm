@@ -3,8 +3,9 @@ package Finance::Bank::ID::BCA;
 use 5.010;
 use Moo;
 use DateTime;
+use Log::Any '$log';
 
-our $VERSION = '0.22'; # VERSION
+our $VERSION = '0.23'; # VERSION
 
 extends 'Finance::Bank::ID::Base';
 
@@ -16,6 +17,19 @@ sub BUILD {
 
     $self->site("https://ibank.klikbca.com") unless $self->site;
     $self->https_host("ibank.klikbca.com")   unless $self->https_host;
+}
+
+sub _req {
+    my ($self, @args) = @_;
+
+    # 2012-03-12 - KlikBCA server since a few week ago rejects TE request
+    # header, so we do not send them.
+    local @LWP::Protocol::http::EXTRA_SOCK_OPTS =
+        @LWP::Protocol::http::EXTRA_SOCK_OPTS;
+    push(@LWP::Protocol::http::EXTRA_SOCK_OPTS, SendTE => 0);
+    #$log->tracef("EXTRA_SOCK_OPTS=%s", \@LWP::Protocol::http::EXTRA_SOCK_OPTS);
+
+    $self->SUPER::_req(@args);
 }
 
 sub login {
@@ -403,7 +417,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 

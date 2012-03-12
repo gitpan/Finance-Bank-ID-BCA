@@ -15,11 +15,11 @@ meta-spec:
 name: Finance-Bank-ID-BCA
 requires:
   App::Options: 0
-  Crypt::SSLeay: 0
   Data::Dumper: 0
   Data::Rmap: 0
   DateTime: 0
   File::Slurp: 0
+  LWP::Protocol::https: 0
   Log::Any: 0
   Log::Any::App: 0.23
   Moo: 0
@@ -29,4 +29,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-BCA/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-BCA
-version: 0.22
+version: 0.23

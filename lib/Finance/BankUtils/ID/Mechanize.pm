@@ -5,7 +5,7 @@ use Crypt::SSLeay;
 use Log::Any qw($log);
 use base qw(WWW::Mechanize);
 
-our $VERSION = '0.22'; # VERSION
+our $VERSION = '0.23'; # VERSION
 
 sub new {
     my ($class, %args) = @_;
@@ -44,7 +44,7 @@ Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize that does HTTPS
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 
