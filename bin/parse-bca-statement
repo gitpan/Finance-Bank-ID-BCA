@@ -10,6 +10,8 @@ use warnings;
 use Finance::Bank::ID::BCA;
 use YAML;
 
+our $VERSION = '0.24'; # VERSION
+
 my $ibank = Finance::Bank::ID::BCA->new;
 my $stmt = join "", <>;
 print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
@@ -27,7 +29,7 @@ parse_bca_statement - Parse BCA internet banking statement
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 

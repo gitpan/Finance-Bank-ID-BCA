@@ -5,12 +5,12 @@ use Moo;
 use DateTime;
 use Log::Any '$log';
 
-our $VERSION = '0.23'; # VERSION
+our $VERSION = '0.24'; # VERSION
 
 extends 'Finance::Bank::ID::Base';
 
 has _variant => (is => 'rw'); # bisnis or perorangan
-has skip_NEXT => (is => 'rw'); # bisnis or perorangan
+has skip_NEXT => (is => 'rw');
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -417,7 +417,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 
