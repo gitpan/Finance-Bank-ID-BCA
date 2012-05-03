@@ -7,6 +7,7 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
+    "File::Slurp" => 0,
     "Module::Build" => "0.3601"
   },
   "configure_requires" => {
@@ -17,7 +18,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Finance-Bank-ID-BCA",
-  "dist_version" => "0.24",
+  "dist_version" => "0.25",
   "license" => "perl",
   "module_name" => "Finance::Bank::ID::BCA",
   "recommends" => {},
@@ -27,7 +28,6 @@ my %module_build_args = (
     "Data::Dumper" => 0,
     "Data::Rmap" => 0,
     "DateTime" => 0,
-    "File::Slurp" => 0,
     "LWP::Protocol::https" => 0,
     "Log::Any" => 0,
     "Log::Any::App" => "0.23",

@@ -14,7 +14,7 @@ use File::Slurp;
 use Finance::Bank::ID::BCA;
 use YAML;
 
-our $VERSION = '0.24'; # VERSION
+our $VERSION = '0.25'; # VERSION
 
 # we don't use required=>1 because App::Options still works in BEGIN phase and
 # thus breaks perl -c.
@@ -105,7 +105,7 @@ download_bca
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 SYNOPSIS
 

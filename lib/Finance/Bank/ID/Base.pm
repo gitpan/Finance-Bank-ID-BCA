@@ -9,7 +9,7 @@ use Data::Rmap qw(:all);
 use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 
-our $VERSION = '0.24'; # VERSION
+our $VERSION = '0.25'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -258,7 +258,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 SYNOPSIS
 

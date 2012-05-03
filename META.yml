@@ -3,6 +3,7 @@ abstract: 'Check your BCA accounts from Perl'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
+  File::Slurp: 0
   Module::Build: 0.3601
 configure_requires:
   Module::Build: 0.3601
@@ -18,7 +19,6 @@ requires:
   Data::Dumper: 0
   Data::Rmap: 0
   DateTime: 0
-  File::Slurp: 0
   LWP::Protocol::https: 0
   Log::Any: 0
   Log::Any::App: 0.23
@@ -29,4 +29,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-BCA/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-BCA
-version: 0.24
+version: 0.25
