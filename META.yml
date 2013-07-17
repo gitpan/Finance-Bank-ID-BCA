@@ -8,7 +8,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300006, CPAN::Meta::Converter version 2.113640'
+generated_by: 'Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,17 +16,18 @@ meta-spec:
 name: Finance-Bank-ID-BCA
 requires:
   App::Options: 0
-  Data::Dumper: 0
   Data::Rmap: 0
   DateTime: 0
-  LWP::Protocol::https: 0
+  File::HomeDir: 0
   Log::Any: 0
   Log::Any::App: 0.23
   Moo: 0
+  Perinci::CmdLine: 0.55
+  Rinci: v1.1.20
   WWW::Mechanize: 0
   YAML: 0
-  perl: 5.010000
+  perl: 5.010001
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-BCA/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-BCA
-version: 0.25
+version: 0.26

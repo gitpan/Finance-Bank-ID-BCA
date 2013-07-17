@@ -18,27 +18,28 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Finance-Bank-ID-BCA",
-  "dist_version" => "0.25",
+  "dist_version" => "0.26",
   "license" => "perl",
   "module_name" => "Finance::Bank::ID::BCA",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
     "App::Options" => 0,
-    "Data::Dumper" => 0,
     "Data::Rmap" => 0,
     "DateTime" => 0,
-    "LWP::Protocol::https" => 0,
+    "File::HomeDir" => 0,
     "Log::Any" => 0,
     "Log::Any::App" => "0.23",
     "Moo" => 0,
+    "Perinci::CmdLine" => "0.55",
+    "Rinci" => "v1.1.20",
     "WWW::Mechanize" => 0,
     "YAML" => 0,
-    "perl" => "5.010000"
+    "perl" => "5.010001"
   },
   "script_files" => [
-    "bin/parse-bca-statement",
-    "bin/download-bca"
+    "bin/download-bca",
+    "bin/parse-bca-statement"
   ]
 );
 

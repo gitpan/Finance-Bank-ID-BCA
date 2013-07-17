@@ -9,7 +9,7 @@ use Data::Rmap qw(:all);
 use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -258,7 +258,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -270,6 +270,28 @@ This module provides a base implementation for L<Finance::Bank::ID::BCA> and
 L<Finance::Bank::ID::Mandiri>.
 
 =head1 ATTRIBUTES
+
+=head2 accounts
+
+=head2 https_ca_dir
+
+=head2 https_host
+
+=head2 logged_in
+
+=head2 logger
+
+=head2 logger_dump
+
+=head2 mech
+
+=head2 password
+
+=head2 site
+
+=head2 username
+
+=head2 verify_https
 
 =head1 METHODS
 
@@ -319,7 +341,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

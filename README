@@ -2,9 +2,15 @@ NAME
     Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 VERSION
-    version 0.25
+    version 0.26
 
 SYNOPSIS
+    If you just want to download banking statements, and you use Linux/Unix,
+    you might want to use the download-bca script instead of having to deal
+    with this library directly.
+
+    If you want to use the library in your Perl application:
+
         use Finance::Bank::ID::BCA;
 
         # FBI::BCA uses Log::Any. to show logs using, e.g., Log4perl:
@@ -65,7 +71,7 @@ DESCRIPTION
     module can parse statement page from both versions.
 
     Warning: This module is neither offical nor is it tested to be 100%
-    save! Because of the nature of web-robots, everything may break from one
+    safe! Because of the nature of web-robots, everything may break from one
     day to the other when the underlying web interface changes.
 
 WARNING
@@ -258,7 +264,7 @@ AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2012 by Steven Haryanto.
+    This software is copyright (c) 2013 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

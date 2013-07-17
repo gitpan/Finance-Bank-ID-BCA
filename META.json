@@ -4,7 +4,7 @@
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300006, CPAN::Meta::Converter version 2.113640",
+   "generated_by" : "Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -24,24 +24,33 @@
             "Module::Build" : "0.3601"
          }
       },
+      "develop" : {
+         "requires" : {
+            "Pod::Coverage::TrustPod" : "0",
+            "Test::Pod" : "1.41",
+            "Test::Pod::Coverage" : "1.08",
+            "Test::Rinci" : "0.01"
+         }
+      },
       "runtime" : {
          "requires" : {
-            "App::Options" : 0,
-            "Data::Dumper" : 0,
-            "Data::Rmap" : 0,
-            "DateTime" : 0,
-            "LWP::Protocol::https" : 0,
-            "Log::Any" : 0,
+            "App::Options" : "0",
+            "Data::Rmap" : "0",
+            "DateTime" : "0",
+            "File::HomeDir" : "0",
+            "Log::Any" : "0",
             "Log::Any::App" : "0.23",
-            "Moo" : 0,
-            "WWW::Mechanize" : 0,
-            "YAML" : 0,
-            "perl" : "5.010000"
+            "Moo" : "0",
+            "Perinci::CmdLine" : "0.55",
+            "Rinci" : "v1.1.20",
+            "WWW::Mechanize" : "0",
+            "YAML" : "0",
+            "perl" : "5.010001"
          }
       },
       "test" : {
          "requires" : {
-            "File::Slurp" : 0
+            "File::Slurp" : "0"
          }
       }
    },
@@ -52,6 +61,6 @@
          "url" : "http://github.com/sharyanto/perl-Finance-Bank-ID-BCA"
       }
    },
-   "version" : "0.25"
+   "version" : "0.26"
 }
 

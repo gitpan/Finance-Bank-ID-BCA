@@ -23,4 +23,5 @@ t/data/stmt2-NEXT.txt
 t/data/stmt2.txt
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/release-rinci.t
 t/release-verify_https.t
