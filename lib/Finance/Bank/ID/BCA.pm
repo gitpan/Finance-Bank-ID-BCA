@@ -5,7 +5,7 @@ use Moo;
 use DateTime;
 use Log::Any '$log';
 
-our $VERSION = '0.27'; # VERSION
+our $VERSION = '0.28'; # VERSION
 
 extends 'Finance::Bank::ID::Base';
 
@@ -448,7 +448,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 SYNOPSIS
 

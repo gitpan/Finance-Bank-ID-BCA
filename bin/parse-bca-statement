@@ -7,7 +7,7 @@ use warnings;
 use Finance::Bank::ID::BCA;
 use Perinci::CmdLine;
 
-our $VERSION = '0.27'; # VERSION
+our $VERSION = '0.28'; # VERSION
 
 our %SPEC;
 
@@ -43,7 +43,7 @@ parse-bca-statement - Parse BCA internet banking statement
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 HOMEPAGE
 

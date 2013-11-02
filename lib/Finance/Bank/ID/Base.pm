@@ -10,7 +10,7 @@ use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 use YAML::Syck qw(LoadFile DumpFile);
 
-our $VERSION = '0.27'; # VERSION
+our $VERSION = '0.28'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -82,7 +82,7 @@ sub _req {
     }
 
     $opts->{id} or die "BUG: Request does not have id";
-    $opts->{id} =~ /\A\w+\z/ or die "BUG: Invalid syntax in id '$opts->{id}'";
+    $opts->{id} =~ /\A[\w-]+\z/ or die "BUG: Invalid syntax in id '$opts->{id}'";
 
     $self->_set_default_mech unless $self->mech;
     my $mech = $self->mech;
@@ -278,7 +278,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 SYNOPSIS
 
