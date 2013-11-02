@@ -1,10 +1,15 @@
 package Finance::BankUtils::ID::Mechanize;
 
 use 5.010;
+use strict;
+use warnings;
 use Log::Any qw($log);
-use base qw(WWW::Mechanize);
 
-our $VERSION = '0.26'; # VERSION
+use parent qw(WWW::Mechanize);
+
+use SHARYANTO::String::Util qw(indent);
+
+our $VERSION = '0.27'; # VERSION
 
 sub new {
     my ($class, %args) = @_;
@@ -15,8 +20,13 @@ sub new {
     bless $mech, $class;
 }
 
-sub request {
-    my ($self, $req) = @_;
+# will be set by some other code, and will be immadiately consumed and emptied
+# by _make_request().
+our $saved_resp;
+
+sub _make_request {
+    my $self = shift;
+    my $req = shift;
     local $ENV{HTTPS_CA_DIR} = $self->{verify_https} ?
         $self->{https_ca_dir} : '';
     $log->tracef("HTTPS_CA_DIR = %s", $ENV{HTTPS_CA_DIR});
@@ -24,26 +34,36 @@ sub request {
         $req->header('If-SSL-Cert-Subject',
                      qr!\Q/CN=$self->{https_host}\E(/|$)!);
     }
-    $log->trace('Mech request: ' . $req->headers_as_string);
-    my $resp = $self->SUPER::request($req);
-    $log->trace('Mech response: ' . $resp->headers_as_string);
+    $log->trace("Mech request:\n" . indent('  ', $req->headers_as_string));
+    my $resp;
+    if ($saved_resp) {
+        $resp = $saved_resp;
+        $saved_resp = undef;
+        $log->trace("Mech response (from saved):" .
+                        indent('  ', $resp->headers_as_string));
+    } else {
+        $resp = $self->SUPER::_make_request($req, @_);
+        $log->trace("Mech response:\n" . indent('  ', $resp->headers_as_string));
+    }
     $resp;
 }
 
 1;
-# ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
-
+# ABSTRACT: A subclass of WWW::Mechanize
 
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
-Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize that does HTTPS certificate verification
+Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -56,13 +76,40 @@ version 0.26
 
 =head1 DESCRIPTION
 
-This is a subclass of WWW::Mechanize that does (optional) HTTPS certificate verification.
+This is a subclass of WWW::Mechanize that can do some extra stuffs:
+
+=over
+
+=item * HTTPS certificate verification
+
+=item * use saved response from a file
+
+=item * log using Log::ny
+
+=back
 
 =head1 METHODS
 
 =head2 new()
 
 =head2 request()
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-BCA>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-BCA>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-BCA
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 
@@ -76,4 +123,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

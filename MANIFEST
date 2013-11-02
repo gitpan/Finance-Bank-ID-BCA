@@ -1,10 +1,10 @@
-Build.PL
 Changes
 LICENSE
 MANIFEST
 MANIFEST.SKIP
 META.json
 META.yml
+Makefile.PL
 README
 bin/download-bca
 bin/parse-bca-statement
@@ -25,3 +25,4 @@ t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/release-rinci.t
 t/release-verify_https.t
+weaver.ini

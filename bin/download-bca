@@ -9,9 +9,9 @@ use File::HomeDir;
 use File::Path;
 use File::Slurp;
 use Finance::Bank::ID::BCA;
-use YAML;
+use YAML::Syck;
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 # we don't use required=>1 because App::Options still works in BEGIN phase and
 # thus breaks perl -c.
@@ -26,6 +26,9 @@ use App::Options (
                        default => File::HomeDir->my_home . "/bca" },
         log_dir   => { type => 'string',   # req
                        default => File::HomeDir->my_home . "/bca/logs" },
+        save_dir  => { type => 'string',   # req
+                       default => File::HomeDir->my_home . "/bca/logs/save" },
+        mode      => { type => 'string', default => '' },
         days      => { type => 'string', default => 31 },
     },
 );
@@ -56,11 +59,13 @@ die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{d
 $log->info("Start session");
 
 my $ibank = Finance::Bank::ID::BCA->new(
-    username    => $App::options{username},
-    password    => $App::options{password},
-    logger      => $log,
-    logger_dump => Log::Any->get_logger(category => "Dumps"),
+    username     => $App::options{username},
+    password     => $App::options{password},
+    logger       => $log,
+    logger_dump  => Log::Any->get_logger(category => "Dumps"),
     verify_https => 1,
+    save_dir     => $App::options{save_dir},
+    mode         => $App::options{mode},
 );
 
 eval {
@@ -95,9 +100,11 @@ $log->info("End session");
 # ABSTRACT: Download BCA statement
 # PODNAME: download-bca
 
-
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -105,7 +112,7 @@ download-bca - Download BCA statement
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -132,6 +139,23 @@ statements to ~/bca/. To change this, use --days and --data_dir options.
 
 L<Finance::Bank::ID::BCA>
 
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-BCA>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-BCA>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-BCA
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
@@ -144,4 +168,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

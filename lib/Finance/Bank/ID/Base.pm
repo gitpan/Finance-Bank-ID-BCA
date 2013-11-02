@@ -8,8 +8,9 @@ use Data::Dumper;
 use Data::Rmap qw(:all);
 use DateTime;
 use Finance::BankUtils::ID::Mechanize;
+use YAML::Syck qw(LoadFile DumpFile);
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -28,6 +29,8 @@ has _req_counter => (is => 'rw', default => sub{0});
 has verify_https => (is => 'rw', default => sub{0});
 has https_ca_dir => (is => 'rw', default => sub{'/etc/ssl/certs'});
 has https_host   => (is => 'rw');
+has mode         => (is => 'rw', default => sub{''});
+has save_dir     => (is => 'rw');
 
 sub _fmtdate {
     my ($self, $dt) = @_;
@@ -71,19 +74,34 @@ sub _set_default_mech {
     );
 }
 
-# if check_sub is supplied, then after the request it will be passed the mech
-# object and should return an error string. request is assumed to be failed if
-# error string is not empty.
-
 sub _req {
-    my ($self, $meth, $args, $check_sub) = @_;
+    my ($self, $meth, $args, $opts) = @_;
+
+    if (ref($opts) ne 'HASH') {
+        die "Please update your module, 3rd arg is now a hashref since ".__PACKAGE__." 0.27";
+    }
+
+    $opts->{id} or die "BUG: Request does not have id";
+    $opts->{id} =~ /\A\w+\z/ or die "BUG: Invalid syntax in id '$opts->{id}'";
+
     $self->_set_default_mech unless $self->mech;
     my $mech = $self->mech;
     my $c = $self->_req_counter + 1;
     $self->_req_counter($c);
     $self->logger->debug("mech request #$c: $meth ".$self->_dmp($args)."");
     my $errmsg = "";
-    eval { $mech->$meth(@$args) };
+
+    eval {
+        if ($self->mode eq 'simulation' &&
+                $self->save_dir && (-f $self->save_dir . "/$opts->{id}.yaml")) {
+            $Finance::BankUtils::ID::Mechanize::saved_resp =
+                LoadFile($self->save_dir . "/$opts->{id}.yaml");
+        }
+        $mech->$meth(@$args);
+        if ($self->save_dir && $self->mode ne 'simulation') {
+            DumpFile($self->save_dir . "/$opts->{id}.yaml", $mech->response);
+        }
+    };
     my $evalerr = $@;
 
     eval {
@@ -103,9 +121,9 @@ sub _req {
         # actually mech usually dies if unsuccessful (see above), but
         # this is just in case
         $errmsg = "network error: " . $mech->response->status_line;
-    } elsif ($check_sub) {
-        $errmsg = $check_sub->($mech);
-        $errmsg = "check error: $errmsg" if $errmsg;
+    } elsif ($opts->{after_request}) {
+        $errmsg = $opts->{after_request}->($mech);
+        $errmsg = "after_request check error: $errmsg" if $errmsg;
     }
     if ($errmsg) {
         $errmsg = "mech request #$c failed: $errmsg";
@@ -248,9 +266,11 @@ sub parse_statement {
 1;
 # ABSTRACT: Base class for Finance::Bank::ID::BCA etc
 
-
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -258,7 +278,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -293,47 +313,75 @@ L<Finance::Bank::ID::Mandiri>.
 
 =head2 verify_https
 
+=head2 save_dir => STR
+
+If set, each HTP response will be saved as YAML files in this dir. Existing
+files will be overwritten.
+
+=head2 mode => STR
+
+Can be set to C<simulation> for simulation mode. In this mode, instead of
+actually sending requests to network, each request will use responses saved
+previously in C<save_dir>.
+
 =head1 METHODS
 
-=for Pod::Coverage BUILD
+=for Pod::Coverage ^(BUILD)$
 
-=head2 new(%args)
+=head2 new(%args) => OBJ
 
 Create a new instance.
 
-=head2 login()
+=head2 $obj->login()
 
 Login to netbanking site.
 
-=head2 logout()
+=head2 $obj->logout()
 
 Logout from netbanking site.
 
-=head2 list_accounts()
+=head2 $obj->list_accounts()
 
 List accounts.
 
-=head2 check_balance([$acct])
+=head2 $obj->check_balance([$acct])
 
-=head2 get_balance
+=head2 $obj->get_balance()
 
 Synonym for check_balance.
 
-=head2 get_statement(%args)
+=head2 $obj->get_statement(%args)
 
 Get account statement.
 
-=head2 check_statement
+=head2 $obj->check_statement()
 
 Alias for get_statement
 
-=head2 account_statement
+=head2 $obj->account_statement()
 
 Alias for get_statement
 
-=head2 parse_statement($html_or_text, %opts)
+=head2 $obj->parse_statement($html_or_text, %opts)
 
 Parse HTML/text into statement data.
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-BCA>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-BCA>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-BCA
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 
@@ -347,4 +395,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

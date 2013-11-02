@@ -5,7 +5,7 @@ use Moo;
 use DateTime;
 use Log::Any '$log';
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 extends 'Finance::Bank::ID::Base';
 
@@ -41,7 +41,7 @@ sub login {
     die "400 Password not supplied" unless $self->password;
 
     $self->logger->debug('Logging in ...');
-    $self->_req(get => [$s]);
+    $self->_req(get => [$s], {id=>'login_form'});
     $self->_req(submit_form => [
                                 form_number => 1,
                                 fields => {'value(user_id)'=>$self->username,
@@ -49,16 +49,19 @@ sub login {
                                            },
                                 button => 'value(Submit)',
                                 ],
-                sub {
-                    my ($mech) = @_;
-                    $mech->content =~ /var err='(.+?)'/ and return $1;
-                    $mech->content =~ /=logout"/ and return;
-                    "unknown login result page";
-                }
-                                );
+                {
+                    id => 'login',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        $mech->content =~ /var err='(.+?)'/ and return $1;
+                        $mech->content =~ /=logout"/ and return;
+                        "unknown login result page";
+                    },
+                });
     $self->logged_in(1);
-    $self->_req(get => ["$s/authentication.do?value(actions)=welcome"]);
-    #$self->_req(get => ["$s/nav_bar_indo/menu_nav.htm"]); # failed?
+    $self->_req(get => ["$s/authentication.do?value(actions)=welcome"],
+                {id=>'welcome'});
+    #$self->_req(get => ["$s/nav_bar_indo/menu_nav.htm"], {id=>'navbar'}); # failed?
 }
 
 sub logout {
@@ -66,14 +69,16 @@ sub logout {
 
     return 1 unless $self->logged_in;
     $self->logger->debug('Logging out ...');
-    $self->_req(get => [$self->site . "/authentication.do?value(actions)=logout"]);
+    $self->_req(get => [$self->site . "/authentication.do?value(actions)=logout"],
+                {id=>'logout'});
     $self->logged_in(0);
 }
 
 sub _menu {
     my ($self) = @_;
     my $s = $self->site;
-    $self->_req(get => ["$s/nav_bar_indo/account_information_menu.htm"]);
+    $self->_req(get => ["$s/nav_bar_indo/account_information_menu.htm"],
+                {id=>'accinfo_menu'});
 }
 
 sub list_accounts {
@@ -98,13 +103,17 @@ sub _check_balances {
     $self->login;
     $self->_menu;
     $self->_req(post => ["$s/balanceinquiry.do"],
-                sub {
-                    my ($mech) = @_;
-                    $mech->content =~ $re or
-                        return "can't find balances, maybe page layout changed?";
-                    '';
-                }
-    );
+                {
+                    id => 'check_balance',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
+                        $mech->content =~ $re or
+                            return "can't find balances, maybe page layout changed?";
+                        '';
+                    },
+                });
 
     my @res;
     my $content = $self->mech->content;
@@ -116,6 +125,16 @@ sub _check_balances {
                  };
     }
     @res;
+}
+
+# parse error message from error page, often shown when we want to check
+# statement or balance.
+sub _get_bca_errmsg {
+    my $self = shift;
+    my $mech = $self->mech;
+    my $ct = $mech->content;
+    $self->logger->error("TMP: 1");
+    return $1 if $ct =~ m!^<font.+?red><b>(.+)</b></font>!m;
 }
 
 sub check_balance {
@@ -139,11 +158,16 @@ sub get_statement {
     $self->logger->info("Getting statement for ".
         ($args{account} ? "account `$args{account}'" : "default account")." ...");
     $self->_req(post => ["$s/accountstmt.do?value(actions)=acct_stmt"],
-                sub {
-                    my ($mech) = @_;
-                    $mech->content =~ /<form/i or
-                        return "no form found, maybe we got logged out?";
-                    '';
+                {
+                    id => 'get_statement_form',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
+                        $mech->content =~ /<form/i or
+                            return "no form found, maybe we got logged out?";
+                        '';
+                    },
                 });
 
     my $form = $self->mech->form_number(1);
@@ -230,9 +254,14 @@ sub get_statement {
                                     "value(endYr)" => $end_dt->year,
                                           },
                                 ],
-                sub {
-                    my ($mech) = @_;
-                    ''; # XXX check for error
+                {
+                    id => 'get_statement',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
+                        '';
+                    },
                 });
     my $parse_opts = $args{parse_opts} // {};
     my $resp = $self->parse_statement($self->mech->content, %$parse_opts);
@@ -407,9 +436,11 @@ sub _ps_get_transactions {
 1;
 # ABSTRACT: Check your BCA accounts from Perl
 
-
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -417,7 +448,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -469,9 +500,6 @@ If you want to use the library in your Perl application:
 
     # utility routines
     my $res = $ibank->parse_statement($html);
-
-Also see the examples/ subdirectory in the distribution for a sample script
-using this module.
 
 =head1 DESCRIPTION
 
@@ -697,6 +725,23 @@ Additional notes:
 The method can also handle some copy-pasted text from the GUI browser, but this
 is no longer documented or guaranteed to keep working.
 
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-BCA>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-BCA>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-BCA
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
@@ -709,4 +754,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
