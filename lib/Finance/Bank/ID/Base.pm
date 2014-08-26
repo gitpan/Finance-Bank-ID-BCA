@@ -10,7 +10,7 @@ use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 use YAML::Syck qw(LoadFile DumpFile);
 
-our $VERSION = '0.29'; # VERSION
+our $VERSION = '0.30'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -278,7 +278,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-This document describes version 0.29 of Finance::Bank::ID::Base (from Perl distribution Finance-Bank-ID-BCA), released on 2014-05-17.
+This document describes version 0.30 of Finance::Bank::ID::Base (from Perl distribution Finance-Bank-ID-BCA), released on 2014-08-26.
 
 =head1 SYNOPSIS
 

@@ -1,13 +1,14 @@
-#!/usr/bin/perl
+#!perl
+
+our $DATE = '2014-08-26'; # DATE
+our $VERSION = '0.30'; # VERSION
 
 use 5.010;
 use strict;
 use warnings;
 
 use Finance::Bank::ID::BCA;
-use Perinci::CmdLine;
-
-our $VERSION = '0.29'; # VERSION
+use Perinci::CmdLine::Any;
 
 our %SPEC;
 
@@ -27,7 +28,8 @@ sub run {
     $ibank->parse_statement($args{statement}, return_datetime_obj=>0);
 }
 
-1;
+Perinci::CmdLine::Any->new(url => '/main/run')->run;
+
 # ABSTRACT: Parse BCA internet banking statement
 # PODNAME: parse-bca-statement
 
@@ -43,7 +45,7 @@ parse-bca-statement - Parse BCA internet banking statement
 
 =head1 VERSION
 
-This document describes version 0.29 of parse-bca-statement (from Perl distribution Finance-Bank-ID-BCA), released on 2014-05-17.
+This document describes version 0.30 of parse-bca-statement (from Perl distribution Finance-Bank-ID-BCA), released on 2014-08-26.
 
 =head1 HOMEPAGE
 

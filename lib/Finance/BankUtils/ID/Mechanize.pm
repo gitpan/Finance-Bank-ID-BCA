@@ -9,7 +9,7 @@ use parent qw(WWW::Mechanize);
 
 use SHARYANTO::String::Util qw(indent);
 
-our $VERSION = '0.29'; # VERSION
+our $VERSION = '0.30'; # VERSION
 
 sub new {
     my ($class, %args) = @_;
@@ -63,7 +63,7 @@ Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize
 
 =head1 VERSION
 
-This document describes version 0.29 of Finance::BankUtils::ID::Mechanize (from Perl distribution Finance-Bank-ID-BCA), released on 2014-05-17.
+This document describes version 0.30 of Finance::BankUtils::ID::Mechanize (from Perl distribution Finance-Bank-ID-BCA), released on 2014-08-26.
 
 =head1 SYNOPSIS
 

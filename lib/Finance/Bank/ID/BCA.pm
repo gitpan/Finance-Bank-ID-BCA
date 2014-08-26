@@ -5,7 +5,7 @@ use Moo;
 use DateTime;
 use Log::Any '$log';
 
-our $VERSION = '0.29'; # VERSION
+our $VERSION = '0.30'; # VERSION
 
 extends 'Finance::Bank::ID::Base';
 
@@ -447,7 +447,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-This document describes version 0.29 of Finance::Bank::ID::BCA (from Perl distribution Finance-Bank-ID-BCA), released on 2014-05-17.
+This document describes version 0.30 of Finance::Bank::ID::BCA (from Perl distribution Finance-Bank-ID-BCA), released on 2014-08-26.
 
 =head1 SYNOPSIS
 
