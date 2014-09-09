@@ -10,7 +10,7 @@ use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 use YAML::Syck qw(LoadFile DumpFile);
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -278,7 +278,7 @@ Finance::Bank::ID::Base - Base class for Finance::Bank::ID::BCA etc
 
 =head1 VERSION
 
-This document describes version 0.30 of Finance::Bank::ID::Base (from Perl distribution Finance-Bank-ID-BCA), released on 2014-08-26.
+This document describes version 0.31 of Finance::Bank::ID::Base (from Perl distribution Finance-Bank-ID-BCA), released on 2014-09-09.
 
 =head1 SYNOPSIS
 
@@ -372,7 +372,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Finance-Ba
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-BCA>.
+Source repository is at L<https://github.com/perlancar/perl-Finance-Bank-ID-BCA>.
 
 =head1 BUGS
 
@@ -384,11 +384,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2014 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

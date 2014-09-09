@@ -11,7 +11,7 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Check your BCA accounts from Perl",
-  "AUTHOR" => "Steven Haryanto <stevenharyanto\@gmail.com>",
+  "AUTHOR" => "perlancar <perlancar\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
@@ -43,7 +43,7 @@ my %WriteMakefileArgs = (
     "IPC::Open3" => 0,
     "Test::More" => "0.98"
   },
-  "VERSION" => "0.30",
+  "VERSION" => "0.31",
   "test" => {
     "TESTS" => "t/*.t"
   }
