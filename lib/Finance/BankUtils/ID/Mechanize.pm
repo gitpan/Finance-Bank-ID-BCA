@@ -1,5 +1,8 @@
 package Finance::BankUtils::ID::Mechanize;
 
+our $DATE = '2014-12-10'; # DATE
+our $VERSION = '0.32'; # VERSION
+
 use 5.010;
 use strict;
 use warnings;
@@ -7,9 +10,7 @@ use Log::Any qw($log);
 
 use parent qw(WWW::Mechanize);
 
-use SHARYANTO::String::Util qw(indent);
-
-our $VERSION = '0.31'; # VERSION
+use String::Indent ();
 
 sub new {
     my ($class, %args) = @_;
@@ -34,16 +35,16 @@ sub _make_request {
         $req->header('If-SSL-Cert-Subject',
                      qr!\Q/CN=$self->{https_host}\E(/|$)!);
     }
-    $log->trace("Mech request:\n" . indent('  ', $req->headers_as_string));
+    $log->trace("Mech request:\n" . String::Indent::indent('  ', $req->headers_as_string));
     my $resp;
     if ($saved_resp) {
         $resp = $saved_resp;
         $saved_resp = undef;
         $log->trace("Mech response (from saved):" .
-                        indent('  ', $resp->headers_as_string));
+                        String::Indent::indent('  ', $resp->headers_as_string));
     } else {
         $resp = $self->SUPER::_make_request($req, @_);
-        $log->trace("Mech response:\n" . indent('  ', $resp->headers_as_string));
+        $log->trace("Mech response:\n" . String::Indent::indent('  ', $resp->headers_as_string));
     }
     $resp;
 }
@@ -63,7 +64,7 @@ Finance::BankUtils::ID::Mechanize - A subclass of WWW::Mechanize
 
 =head1 VERSION
 
-This document describes version 0.31 of Finance::BankUtils::ID::Mechanize (from Perl distribution Finance-Bank-ID-BCA), released on 2014-09-09.
+This document describes version 0.32 of Finance::BankUtils::ID::Mechanize (from Perl distribution Finance-Bank-ID-BCA), released on 2014-12-10.
 
 =head1 SYNOPSIS
 

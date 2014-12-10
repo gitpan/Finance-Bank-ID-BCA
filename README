@@ -2,8 +2,8 @@ NAME
     Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 VERSION
-    This document describes version 0.31 of Finance::Bank::ID::BCA (from
-    Perl distribution Finance-Bank-ID-BCA), released on 2014-09-09.
+    This document describes version 0.32 of Finance::Bank::ID::BCA (from
+    Perl distribution Finance-Bank-ID-BCA), released on 2014-12-10.
 
 SYNOPSIS
     If you just want to download banking statements, and you use Linux/Unix,
@@ -85,10 +85,6 @@ WARNING
 ERROR HANDLING AND DEBUGGING
     Most methods die() when encountering errors, so you can use eval() to
     trap them.
-
-    This module uses Log::Any, so you can see more debugging statements on
-    your screen, log files, etc. See the Log::Any documentation on how to do
-    that.
 
     Full response headers and bodies are dumped to a separate logger. See
     documentation on "new()" below and the sample script in examples/

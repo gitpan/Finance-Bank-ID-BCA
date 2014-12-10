@@ -5,7 +5,7 @@ use Moo;
 use DateTime;
 use Log::Any '$log';
 
-our $VERSION = '0.31'; # VERSION
+our $VERSION = '0.32'; # VERSION
 
 extends 'Finance::Bank::ID::Base';
 
@@ -447,7 +447,7 @@ Finance::Bank::ID::BCA - Check your BCA accounts from Perl
 
 =head1 VERSION
 
-This document describes version 0.31 of Finance::Bank::ID::BCA (from Perl distribution Finance-Bank-ID-BCA), released on 2014-09-09.
+This document describes version 0.32 of Finance::Bank::ID::BCA (from Perl distribution Finance-Bank-ID-BCA), released on 2014-12-10.
 
 =head1 SYNOPSIS
 
@@ -532,10 +532,6 @@ GUARANTEE>, explicit or implied.
 =head1 ERROR HANDLING AND DEBUGGING
 
 Most methods die() when encountering errors, so you can use eval() to trap them.
-
-This module uses L<Log::Any>, so you can see more debugging statements
-on your screen, log files, etc. See the Log::Any documentation on how
-to do that.
 
 Full response headers and bodies are dumped to a separate logger. See
 documentation on C<new()> below and the sample script in examples/ subdirectory
